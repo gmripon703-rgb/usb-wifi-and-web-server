@@ -1,0 +1,36 @@
+#!/usr/sbin/nft -f
+# ==============================================================================
+# Linux AMD64 Wi-Fi Dashboard - Isolated nftables ruleset
+# Table: inet wifi_dashboard_nat
+#
+# NOTE: This table is dedicated to Wi-Fi dashboard NAT and client isolation.
+# It can be safely loaded and removed with:
+#   nft -f /etc/wifi-dashboard/nftables_nat.nft
+#   nft delete table inet wifi_dashboard_nat
+# ==============================================================================
+
+table inet wifi_dashboard_nat {
+    # Client Blocking Filter Set
+    set blocked_macs {
+        type ether_addr
+        flags dynamic
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+        oifname "wlan0" ip saddr 192.168.50.0/24 counter masquerade
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy accept;
+
+        # Drop traffic from blocked clients
+        ether saddr @blocked_macs counter drop
+
+        # Allow outbound traffic from AP clients to WAN
+        iifname "wlan1" oifname "wlan0" counter accept
+
+        # Allow inbound established and related return traffic
+        iifname "wlan0" oifname "wlan1" ct state { established, related } counter accept
+    }
+}

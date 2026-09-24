@@ -1,0 +1,6 @@
+{
+  "name": "Ubuntu Wi-Fi Repeater & AP Dashboard",
+  "description": "Production-quality Linux AMD64 Wi-Fi Repeater, Access Point, and Network Routing Dashboard for Ubuntu Desktop with RTL8821C support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

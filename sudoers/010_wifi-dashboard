@@ -1,0 +1,26 @@
+# ==============================================================================
+# Sudoers Configuration for Linux Wi-Fi Dashboard
+# Grants least-privilege administrative access strictly for Wi-Fi management
+# Place in: /etc/sudoers.d/010_wifi-dashboard
+# ==============================================================================
+
+# Allowed networking binaries with restricted arguments
+Cmnd_Alias WIFI_MGMT = \
+    /usr/sbin/ip link *, \
+    /usr/sbin/ip addr *, \
+    /usr/sbin/ip route *, \
+    /usr/sbin/iw dev *, \
+    /usr/sbin/iw phy *, \
+    /usr/sbin/iw reg *, \
+    /usr/sbin/rfkill *, \
+    /usr/bin/nmcli dev *, \
+    /usr/bin/nmcli con *, \
+    /usr/sbin/hostapd *, \
+    /usr/sbin/dnsmasq *, \
+    /usr/sbin/nft *, \
+    /usr/sbin/sysctl -w net.ipv4.ip_forward=*, \
+    /usr/bin/systemctl is-active *, \
+    /usr/bin/systemctl status *
+
+# Apply to wifi-dashboard service account
+wifi-dashboard ALL=(ALL) NOPASSWD: WIFI_MGMT

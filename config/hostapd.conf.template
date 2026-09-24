@@ -1,0 +1,40 @@
+# ==============================================================================
+# hostapd Configuration Template for RTL8821C / Ubuntu Wi-Fi Dashboard
+# ==============================================================================
+interface=wlan1
+driver=nl80211
+ctrl_interface=/var/run/hostapd
+ctrl_interface_group=0
+
+# Wireless Network Identification
+ssid=Ubuntu-RTL-Hotspot-5G
+country_code=US
+ieee80211d=1
+ieee80211h=1
+
+# 802.11ac / 5GHz Configuration (hw_mode=a for 5GHz, hw_mode=g for 2.4GHz)
+hw_mode=a
+channel=36
+ieee80211n=1
+ieee80211ac=1
+
+# VHT (Very High Throughput) Capabilities for 80MHz channel width
+vht_oper_chwidth=1
+vht_oper_centr_freq_seg0_idx=42
+
+# HT Capabilities for 802.11n
+ht_capab=[HT40+][SHORT-GI-40][SHORT-GI-20]
+vht_capab=[SHORT-GI-80]
+
+# Security: WPA2-PSK (AES-CCMP)
+wpa=2
+wpa_passphrase=SecurePassword2026
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+wpa_pairwise=CCMP
+
+# Power and Beacon Settings
+beacon_int=100
+dtim_period=2
+max_num_sta=32
+ignore_broadcast_ssid=0

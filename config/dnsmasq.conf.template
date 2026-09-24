@@ -1,0 +1,28 @@
+# ==============================================================================
+# dnsmasq Configuration Template for RTL8821C AP Subnet
+# ==============================================================================
+# Bind strictly to the AP interface
+interface=wlan1
+bind-dynamic
+except-interface=lo
+except-interface=wlan0
+
+# DHCP IP Allocation Pool & Lease Duration
+dhcp-range=192.168.50.100,192.168.50.250,255.255.255.0,12h
+
+# Gateway option (Option 3)
+dhcp-option=3,192.168.50.1
+
+# DNS Servers (Option 6)
+dhcp-option=6,1.1.1.1,8.8.8.8
+
+# Lease file location
+dhcp-leasefile=/var/lib/misc/dnsmasq.leases
+
+# Domain & Local Resolution
+domain=lan
+local=/lan/
+expand-hosts
+bogus-priv
+filterwin2k
+no-poll

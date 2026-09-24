@@ -1,0 +1,26 @@
+[Unit]
+Description=Linux AMD64 Wi-Fi Repeater & AP Management Dashboard
+After=network.target network-online.target NetworkManager.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/wifi-dashboard
+ExecStart=/usr/bin/node /opt/wifi-dashboard/server.ts
+Restart=on-failure
+RestartSec=5s
+StartLimitIntervalSec=60s
+StartLimitBurst=5
+StandardOutput=journal
+StandardError=journal
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+# Hardening Directives
+ProtectSystem=full
+ProtectHome=read-only
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target
