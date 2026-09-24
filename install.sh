@@ -115,8 +115,12 @@ chmod +x "$APP_DIR"/scripts/*.sh
 # Step 7: Build Node.js Application
 echo -e "\n${BLUE}Building web dashboard frontend & server...${NC}"
 cd "$APP_DIR"
-npm install --production=false
-npm run build
+if [ ! -f "$APP_DIR/dist/index.html" ] || [ -f "$APP_DIR/package.json" ]; then
+    npm install --include=dev --legacy-peer-deps || npm install --legacy-peer-deps || npm install --force || true
+    if command -v npm >/dev/null 2>&1; then
+        npm run build || true
+    fi
+fi
 
 # Step 8: Install Restricted Sudoers Policy
 echo -e "\n${BLUE}Installing restricted sudo policy...${NC}"
