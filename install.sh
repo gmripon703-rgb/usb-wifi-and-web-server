@@ -113,10 +113,21 @@ cp config/nftables.rules.template "$CONF_DIR/nftables_nat.nft"
 chmod +x "$APP_DIR"/scripts/*.sh
 
 # Step 7: Build Node.js Application
-echo -e "\n${BLUE}Building web dashboard frontend & server...${NC}"
+echo -e "\n${BLUE}Preparing web dashboard server & frontend...${NC}"
 cd "$APP_DIR"
-if [ ! -f "$APP_DIR/dist/index.html" ] || [ -f "$APP_DIR/package.json" ]; then
-    npm install --include=dev --legacy-peer-deps || npm install --legacy-peer-deps || npm install --force || true
+
+# Auto-heal legacy-peer-deps and remove any stale conflicting esbuild entry
+echo "legacy-peer-deps=true" > "$APP_DIR/.npmrc"
+if [ -f "$APP_DIR/package.json" ]; then
+    sed -i '/"esbuild":/d' "$APP_DIR/package.json" 2>/dev/null || true
+fi
+
+if [ -f "$APP_DIR/dist/index.html" ]; then
+    echo -e "${GREEN}[PASS]${NC} Pre-built web frontend verified in $APP_DIR/dist. Installing production runtime dependencies..."
+    npm install --omit=dev --legacy-peer-deps || npm install --legacy-peer-deps || true
+else
+    echo -e "${YELLOW}[INFO]${NC} Pre-built frontend not found. Building locally..."
+    npm install --include=dev --legacy-peer-deps || npm install --legacy-peer-deps || true
     if command -v npm >/dev/null 2>&1; then
         npm run build || true
     fi
